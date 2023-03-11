@@ -60,3 +60,5 @@ router.get('/savedRecipes', async (req, res) => {
         res.json(e)
     }
 })
+
+export { router as recipeRouter }
