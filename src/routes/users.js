@@ -11,14 +11,16 @@ router.post('/register', async (req, res) => {
 
     const user = await UserModel.findOne({ username })
 
-    if(user) return res.json({ message: "User already Registered" })
+    if(user) {
+        throw new Error('User Already Exits!!') 
+    }else {
+        const hashedPassword = await bcrypt.hash(password, 10)
 
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    const newUser = await UserModel({ username, password: hashedPassword })
-    await newUser.save()
-
-    res.json({ message: "User created successfully" })
+        const newUser = await UserModel({ username, password: hashedPassword })
+        await newUser.save()
+    
+        res.json({ message: "User created successfully" })
+    }
 })
 
 // login 
