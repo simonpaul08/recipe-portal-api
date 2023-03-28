@@ -24,7 +24,6 @@ router.post('/register', async (req, res) => {
 })
 
 // login 
-
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -41,6 +40,18 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ id: user._id }, "secret")
 
     res.json({ token, userId: user._id })
+})
+
+
+// get user 
+
+router.get('/user/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+
+    if(!user) return res.json({ message: 'user not found' });
+
+    res.json({ username: user.username, id: user._id });
 })
 
 export { router as userRouter };
