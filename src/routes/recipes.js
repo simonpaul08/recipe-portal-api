@@ -46,8 +46,9 @@ router.post('/user/:id', async(req, res) => {
     try {
         const { id } = req.params;
         const user = await UserModel.findOne({ _id: id })
-        console.log(user)
-
+        const recipes = await RecipeModel.find({ userOwner: user._id })
+        res.status(200).send(recipes)
+        
     }catch(e) {
         console.log(e)
     }
