@@ -8,7 +8,6 @@ const router = express.Router();
 
 
 // get all recipes
-
 router.get('/', async (req, res) => {
     try{
         const response = await RecipeModel.find({})
@@ -19,7 +18,6 @@ router.get('/', async (req, res) => {
 })
 
 // create new recipe 
-
 router.post('/', async (req, res) => {
     const recipe = new RecipeModel(req.body);
 
@@ -33,7 +31,6 @@ router.post('/', async (req, res) => {
 
 
 // get single recipe 
-
 router.post('/:id', async (req, res) => {
     const { id } = req.params;
     const recipe = await RecipeModel.findOne({ _id: id });
@@ -43,18 +40,20 @@ router.post('/:id', async (req, res) => {
     res.json(recipe);
 })
 
+// get recipes for a specific user
+router.post('/user/:id', async(req, res) => {
 
-router.put('/', async (req, res) => {
     try {
-        const recipe = await RecipeModel.findById(req.body.recipeId);
-        const user = await UserModel.findById(req.body.userId);
-        user.savedRecipes.push(recipe)
-        await user.save()
-        res.json({ savedRecipes: user.savedRecipes })
+        const { id } = req.params;
+        const user = await UserModel.findOne({ _id: id })
+        console.log(user)
+
     }catch(e) {
-        res.json(e)
+        console.log(e)
     }
+
 })
 
-
 export { router as recipeRouter }
+
+
