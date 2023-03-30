@@ -55,6 +55,22 @@ router.post('/user/:id', async(req, res) => {
 
 })
 
+// delete a specific recipe
+router.delete('/recipe/delete/:id', async (req, res) => {
+    try {
+
+        const { id } = req.params;
+        const recipe = await RecipeModel.deleteOne({ _id: id })
+        if(!recipe) return res.status(500).send('Internal Error')
+
+        const recipes = await RecipeModel.find({})
+        res.status(200).send({ recipes, message: "Recipe delete successfully" })
+
+    }catch(e) {
+        console.log(e)
+    }
+})
+
 export { router as recipeRouter }
 
 
