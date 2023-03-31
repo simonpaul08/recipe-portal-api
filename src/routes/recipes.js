@@ -11,6 +11,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try{
         const response = await RecipeModel.find({})
+        if(response.length === 0) return res.status(404).send('No Recipes Added')
         res.json(response)
     }catch(e) {
         res.json(e)
