@@ -1,5 +1,4 @@
 import express from 'express'
-import mongoose from 'mongoose'
 import { RecipeModel } from '../models/Recipes.js'
 import { UserModel } from '../models/User.js'
 
@@ -20,14 +19,15 @@ router.get('/', async (req, res) => {
 
 // create new recipe 
 router.post('/', async (req, res) => {
-    const recipe = new RecipeModel(req.body);
 
-    try {
-        const response = await recipe.save();
-        res.json(response)
-    }catch(e) {
-        res.json(e)
-    }
+    const value = req.body;
+    const recipe = await RecipeModel(value);
+    const response = await recipe.save();
+
+    if(!response) return res.status(500).send('Error Occured')
+
+    res.status(200).send('Recipe Created')
+    
 })
 
 
@@ -58,18 +58,13 @@ router.post('/user/:id', async(req, res) => {
 
 // delete a specific recipe
 router.delete('/recipe/delete/:id', async (req, res) => {
-    try {
 
-        const { id } = req.params;
-        const recipe = await RecipeModel.deleteOne({ _id: id })
-        if(!recipe) return res.status(500).send('Internal Error')
+    const { id } = req.params;
+    const response = await RecipeModel.deleteOne({ _id: id })
 
-        const recipes = await RecipeModel.find({})
-        res.status(200).send({ recipes, message: "Recipe delete successfully" })
+    if(!response) return res.status(500).send('Error Occured!!')
 
-    }catch(e) {
-        console.log(e)
-    }
+    res.status(200).send('Recipe Deleted')
 })
 
 export { router as recipeRouter }
